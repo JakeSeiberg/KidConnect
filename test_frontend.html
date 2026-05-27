@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kid Connect — Dev Test Board</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Courier New", monospace;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #7fffb2;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.75rem;
+      color: #555;
+      margin-bottom: 28px;
+      letter-spacing: 0.05em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      max-width: 1100px;
+    }
+
+    /* ── Panel ── */
+    .panel {
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .panel-header {
+      background: #1a1a1a;
+      padding: 10px 14px;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7fffb2;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .panel-body { padding: 14px; }
+
+    /* ── Form elements ── */
+    label {
+      display: block;
+      font-size: 0.68rem;
+      color: #777;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    select, textarea, input[type="text"] {
+      width: 100%;
+      background: #161616;
+      border: 1px solid #333;
+      color: #e8e8e8;
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 7px 10px;
+      border-radius: 3px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    select:focus, textarea:focus { border-color: #7fffb2; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    button {
+      font-family: inherit;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+
+    .btn-primary { background: #7fffb2; color: #0f0f0f; font-weight: bold; }
+    .btn-secondary { background: #2a2a2a; color: #aaa; border: 1px solid #333; }
+    .btn-small { padding: 4px 10px; font-size: 0.65rem; }
+
+    .row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .row select { margin-bottom: 0; flex: 1; }
+
+    /* ── Status bar ── */
+    #status {
+      font-size: 0.72rem;
+      padding: 6px 10px;
+      border-radius: 3px;
+      margin-top: 4px;
+      display: none;
+    }
+    #status.ok  { background: #0d2e1a; color: #7fffb2; border: 1px solid #1a5c35; }
+    #status.err { background: #2e0d0d; color: #ff7f7f; border: 1px solid #5c1a1a; }
+
+    /* ── Posts feed ── */
+    #posts-feed { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; }
+
+    .post-card {
+      background: #161616;
+      border: 1px solid #252525;
+      border-radius: 4px;
+      padding: 12px 14px;
+    }
+    .post-card.reply { margin-left: 20px; border-left: 2px solid #2a4a38; }
+
+    .post-meta {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .post-author { font-size: 0.78rem; color: #7fffb2; font-weight: bold; }
+    .post-class  { font-size: 0.65rem; color: #555; }
+    .post-time   { font-size: 0.65rem; color: #444; margin-left: auto; }
+    .post-body   { font-size: 0.84rem; line-height: 1.5; color: #ccc; white-space: pre-wrap; }
+
+    .reply-btn {
+      margin-top: 8px;
+      background: none;
+      border: 1px solid #2a2a2a;
+      color: #666;
+      font-size: 0.65rem;
+      padding: 3px 8px;
+    }
+    .reply-btn:hover { color: #7fffb2; border-color: #7fffb2; opacity: 1; }
+
+    .empty { color: #444; font-size: 0.8rem; padding: 12px 0; text-align: center; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .filter-bar select { margin-bottom: 0; flex: 1; }
+    .filter-bar button { margin: 0; white-space: nowrap; }
+
+    /* ── Reply-to indicator ── */
+    #reply-indicator {
+      background: #0d2e1a;
+      border: 1px solid #1a5c35;
+      border-radius: 3px;
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      color: #7fffb2;
+      margin-bottom: 10px;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #clear-reply { background: none; border: none; color: #555; font-size: 0.9rem; padding: 0; }
+    #clear-reply:hover { color: #ff7f7f; opacity: 1; }
+    #class-status {
+      font-size: 0.72rem;
+      padding: 6px 10px;
+      border-radius: 3px;
+      margin-top: 4px;
+      display: none;
+    }
+    #class-status.ok  { background: #0d2e1a; color: #7fffb2; border: 1px solid #1a5c35; }
+    #class-status.err { background: #2e0d0d; color: #ff7f7f; border: 1px solid #5c1a1a; }
+  </style>
+</head>
+<body>
+
+<h1>Kid Connect</h1>
+<p class="subtitle">dev test board — message board api</p>
+
+<div class="layout">
+
+  <!-- ── LEFT: New Post Form ── -->
+  <div>
+    <div class="panel">
+      <div class="panel-header">New Post</div>
+      <div class="panel-body">
+
+        <div id="reply-indicator">
+          <span id="reply-label">Replying to post #<span id="reply-id"></span></span>
+          <button id="clear-reply" title="Cancel reply">✕</button>
+        </div>
+
+        <label>Class</label>
+        <select id="sel-class">
+          <option value="">— loading —</option>
+        </select>
+
+        <label>Author (participant)</label>
+        <select id="sel-participant">
+          <option value="">— pick a class first —</option>
+        </select>
+
+        <label>Message</label>
+        <textarea id="post-body" placeholder="Write something…"></textarea>
+
+        <button class="btn-primary" onclick="submitPost()">Post Message</button>
+
+        <div id="status"></div>
+      </div>
+    </div>
+  </div>
+
+    <!-- ── Add Class ── -->
+    <div class="panel" style="margin-top: 16px;">
+      <div class="panel-header">Add Class</div>
+      <div class="panel-body">
+        <label>Class Name</label>
+        <input type="text" id="new-class-name" placeholder="e.g. Class 7" />
+        <button class="btn-primary" onclick="submitClass()">Create Class</button>
+        <div id="class-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Posts Feed ── -->
+  <div>
+    <div class="panel">
+      <div class="panel-header">Posts Feed</div>
+      <div class="panel-body">
+
+        <div class="filter-bar">
+          <select id="filter-class">
+            <option value="">All classes</option>
+          </select>
+          <button class="btn-secondary btn-small" onclick="loadPosts()">Refresh</button>
+        </div>
+
+        <div id="posts-feed"><div class="empty">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let replyToId = null;
+
+  // ── Bootstrap ───────────────────────────────────────────────────────────────
+
+  async function bootstrap() {
+    const res  = await fetch("/api/classes");
+    const data = await res.json();
+    const classes = data.classes || [];
+
+    const selClass   = document.getElementById("sel-class");
+    const filterClass = document.getElementById("filter-class");
+
+    selClass.innerHTML = '<option value="">— select class —</option>';
+    classes.forEach(c => {
+      selClass.innerHTML    += `<option value="${c.id}">${c.name}</option>`;
+      filterClass.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+    });
+
+    await loadPosts();
+  }
+
+  // ── Load participants when class changes ─────────────────────────────────────
+
+  document.getElementById("sel-class").addEventListener("change", async function () {
+    const classId = this.value;
+    const sel = document.getElementById("sel-participant");
+    if (!classId) {
+      sel.innerHTML = '<option value="">— pick a class first —</option>';
+      return;
+    }
+    sel.innerHTML = '<option value="">Loading…</option>';
+    const res  = await fetch(`/api/participants?class_id=${classId}`);
+    const data = await res.json();
+    sel.innerHTML = '<option value="">— select participant —</option>';
+    (data.participants || []).forEach(p => {
+      sel.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+    });
+  });
+
+  // ── Load posts ───────────────────────────────────────────────────────────────
+
+  async function loadPosts() {
+    const classId = document.getElementById("filter-class").value;
+    const url     = classId ? `/api/posts?class_id=${classId}` : "/api/posts";
+    const feed    = document.getElementById("posts-feed");
+    feed.innerHTML = '<div class="empty">Loading…</div>';
+
+    try {
+      const res  = await fetch(url);
+      const data = await res.json();
+      const posts = data.posts || [];
+
+      if (!posts.length) {
+        feed.innerHTML = '<div class="empty">No posts yet.</div>';
+        return;
+      }
+
+      feed.innerHTML = "";
+
+      if (data.threaded) {
+        posts.forEach(p => feed.appendChild(renderPost(p, false)));
+      } else {
+        posts.forEach(p => feed.appendChild(renderPost(p, !!p.parent_post_id)));
+      }
+    } catch (e) {
+      feed.innerHTML = `<div class="empty" style="color:#ff7f7f;">Error: ${e.message}</div>`;
+    }
+  }
+
+  function renderPost(post, isReply) {
+    const card = document.createElement("div");
+    card.className = "post-card" + (isReply ? " reply" : "");
+
+    const dt = new Date(post.created_at).toLocaleString();
+    card.innerHTML = `
+      <div class="post-meta">
+        <span class="post-author">${esc(post.author || post.parent_name || "?")}</span>
+        <span class="post-class">${esc(post.class_name || "")}</span>
+        <span class="post-time">${dt}</span>
+      </div>
+      <div class="post-body">${esc(post.body)}</div>
+      <button class="reply-btn btn-small" onclick="setReply(${post.id})">↳ Reply</button>
+    `;
+
+    // Render nested replies (threaded mode)
+    if (post.replies && post.replies.length) {
+      post.replies.forEach(r => card.appendChild(renderPost(r, true)));
+    }
+
+    return card;
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  // ── Reply helpers ─────────────────────────────────────────────────────────────
+
+  function setReply(postId) {
+    replyToId = postId;
+    document.getElementById("reply-id").textContent = postId;
+    document.getElementById("reply-indicator").style.display = "flex";
+    document.getElementById("post-body").focus();
+  }
+
+  document.getElementById("clear-reply").addEventListener("click", () => {
+    replyToId = null;
+    document.getElementById("reply-indicator").style.display = "none";
+  });
+
+  // ── Submit post ───────────────────────────────────────────────────────────────
+
+  async function submitPost() {
+    const classId       = document.getElementById("sel-class").value;
+    const participantId = document.getElementById("sel-participant").value;
+    const body          = document.getElementById("post-body").value.trim();
+    const statusEl      = document.getElementById("status");
+
+    if (!classId || !participantId || !body) {
+      showStatus("Please select a class, a participant, and write a message.", false);
+      return;
+    }
+
+    const payload = { class_id: +classId, participant_id: +participantId, body };
+    if (replyToId) payload.parent_post_id = replyToId;
+
+    try {
+      const res  = await fetch("/api/posts", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        showStatus(`Post #${data.post_id} created successfully!`, true);
+        document.getElementById("post-body").value = "";
+        replyToId = null;
+        document.getElementById("reply-indicator").style.display = "none";
+        // sync filter to the posted class and refresh
+        document.getElementById("filter-class").value = classId;
+        await loadPosts();
+      } else {
+        showStatus("Error: " + data.error, false);
+      }
+    } catch (e) {
+      showStatus("Network error: " + e.message, false);
+    }
+  }
+
+  function showStatus(msg, ok) {
+    const el = document.getElementById("status");
+    el.textContent = msg;
+    el.className = ok ? "ok" : "err";
+    el.style.display = "block";
+    setTimeout(() => { el.style.display = "none"; }, 4000);
+  }
+
+  // ── Add class ─────────────────────────────────────────────────────────────────
+
+  async function submitClass() {
+    const input = document.getElementById("new-class-name");
+    const name  = input.value.trim();
+    if (!name) {
+      showClassStatus("Please enter a class name.", false);
+      return;
+    }
+
+    try {
+      const res  = await fetch("/api/classes", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ name }),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        showClassStatus(`"${data.name}" created (id=${data.class_id})!`, true);
+        input.value = "";
+        // Append to both class dropdowns without full reload
+        const opt = `<option value="${data.class_id}">${esc(data.name)}</option>`;
+        document.getElementById("sel-class").innerHTML    += opt;
+        document.getElementById("filter-class").innerHTML += opt;
+      } else {
+        showClassStatus("Error: " + data.error, false);
+      }
+    } catch (e) {
+      showClassStatus("Network error: " + e.message, false);
+    }
+  }
+
+  function showClassStatus(msg, ok) {
+    const el = document.getElementById("class-status");
+    el.textContent = msg;
+    el.className = ok ? "ok" : "err";
+    el.style.display = "block";
+    setTimeout(() => { el.style.display = "none"; }, 4000);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("new-class-name").addEventListener("keydown", e => {
+      if (e.key === "Enter") submitClass();
+    });
+  });
+
+  // ── Kick off ──────────────────────────────────────────────────────────────────
+  bootstrap();
+</script>
+</body>
+</html>
