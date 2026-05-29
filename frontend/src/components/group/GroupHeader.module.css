@@ -1,0 +1,78 @@
+/*
+ * 
+ * File:    GroupHeader.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped styles for the GroupHeader bar. Dark green
+ *          background with a subtle stripe overlay echoing the
+ *          stripe-band used on cards. flex-shrink: 0 keeps
+ *          the header pinned and always fully visible.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .header — dark green bar spanning full width of the page   */
+.header {
+  background:   var(--green-dark);
+  padding:      12px 16px;
+  display:      flex;
+  align-items:  center;
+  gap:          12px;
+  flex-shrink:  0;
+  /* subtle horizontal stripe overlay echoing stripe-band     */
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+/* .backBtn — small translucent pill button on the left side  */
+.backBtn {
+  background:    rgba(255, 255, 255, 0.15);
+  border:        1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius);
+  color:         var(--white);
+  font-family:   var(--font-head);
+  font-size:     0.85rem;
+  font-weight:   600;
+  padding:       4px 12px;
+  cursor:        pointer;
+  flex-shrink:   0;
+  transition:    background 0.13s;
+}
+.backBtn:hover { background: rgba(255, 255, 255, 0.25); }
+
+/* .info — flexible column holding classTitle and memberName  */
+.info { flex: 1; }
+
+/* .classTitle — class name in large white Fredoka text        */
+.classTitle {
+  font-family: var(--font-head);
+  font-size:   1.1rem;
+  font-weight: 700;
+  color:       var(--white);
+}
+
+/* .memberName — row below classTitle with name and code badge */
+.memberName {
+  font-size:   0.78rem;
+  color:       rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+}
+
+/* .codeBadge — small pill showing join code to teachers only */
+.codeBadge {
+  background:     rgba(255, 255, 255, 0.15);
+  border-radius:  6px;
+  padding:        1px 7px;
+  font-family:    var(--font-head);
+  font-size:      0.72rem;
+  letter-spacing: 0.06em;
+}

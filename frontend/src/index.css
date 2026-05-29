@@ -1,0 +1,261 @@
+/*
+ * 
+ * File:    index.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Global stylesheet for the entire application.
+ *          Defines all CSS custom properties (design tokens)
+ *          that every component references via var(). Also
+ *          defines shared utility classes used across multiple
+ *          components: .card, .stripe-band, .btn, .error, etc.
+ *          This file is imported once in main.jsx and applies
+ *          globally to the whole React tree.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+
+:root {
+  --tan:          #f2e8d5;
+  --tan-mid:      #e8d9be;
+  --tan-dark:     #c9b99a;
+  --green:        #6b8f5e;
+  --green-dark:   #4e6b44;
+  --green-light:  #d4e6c8;
+  --red-muted:    #c0614a;
+  --text-dark:    #3b3228;
+  --text-mid:     #6b5c48;
+  --text-light:   #a8917a;
+  --white:        #fdfaf5;
+  --bubble-mine:  #6b8f5e;
+  --bubble-other: #fdfaf5;
+  --font-head:    'Fredoka', sans-serif;
+  --font-body:    'Nunito', sans-serif;
+  --radius:       10px;
+}
+
+
+/* 
+   RESET & BASE
+   Removes all browser default margin and padding so layout
+   behaves consistently across browsers. Sets box-sizing to
+   border-box so padding is included in element dimensions.
+   */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin:     0;
+  padding:    0;
+}
+
+/* body — sets the font, background, and the repeating dot
+   pattern that gives the page a scrapbook paper texture.
+   Flex centering keeps content centered on the screen.       */
+body {
+  font-family:      var(--font-body);
+  background-color: var(--tan);
+  color:            var(--text-dark);
+  min-height:       100vh;
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+}
+
+
+/* 
+   SHARED UTILITY CLASSES
+   Reusable classes applied via className in JSX components.
+   These are global so any component can use them.
+    */
+
+/* .card — the main white dotted-border container used on all
+   form screens and content blocks throughout the app.         */
+.card {
+  background:    var(--white);
+  border-radius: var(--radius);
+  border:        2px dotted var(--tan-dark);
+  padding:       22px 20px;
+}
+
+/* .stripe-band — a 10px horizontal stripe at the top of major
+   cards to mimic the scrapbook reference design headers.      */
+.stripe-band {
+  height:        10px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--green)       0px,
+    var(--green)       12px,
+    var(--green-light) 12px,
+    var(--green-light) 24px
+  );
+}
+
+/* .card-striped — applied to cards directly below a stripe-band.
+   Removes top border and radius so they appear connected.     */
+.card-striped {
+  border-top:    none;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* .hr — decorative dotted divider inside cards               */
+.hr {
+  border:     none;
+  border-top: 2px dotted var(--tan-dark);
+  margin:     14px 0;
+}
+
+
+/* 
+   TYPOGRAPHY
+    */
+
+/* h2 — primary section heading in dark green Fredoka         */
+h2 {
+  font-family:   var(--font-head);
+  font-size:     1.35rem;
+  font-weight:   600;
+  color:         var(--green-dark);
+  margin-bottom: 2px;
+}
+
+/* .subtitle — small descriptive text below a heading         */
+.subtitle {
+  font-size:     0.85rem;
+  color:         var(--text-mid);
+  margin-bottom: 16px;
+  font-weight:   600;
+}
+
+
+/* 
+   BUTTONS
+   .btn           outline style — transparent background
+   .btn.primary   filled green — used for primary actions
+   .btn.small     compact inline — used inside list headers
+   .btn.danger    red outline — used for destructive actions
+    */
+
+/* Base button — outline style, full width by default         */
+.btn {
+  display:        block;
+  width:          100%;
+  padding:        12px 20px;
+  border-radius:  var(--radius);
+  border:         2.5px solid var(--green);
+  background:     transparent;
+  color:          var(--green-dark);
+  font-family:    var(--font-head);
+  font-size:      1.05rem;
+  font-weight:    600;
+  cursor:         pointer;
+  text-align:     center;
+  transition:     background 0.14s, color 0.14s;
+  letter-spacing: 0.02em;
+}
+
+/* .btn.primary — filled green for primary actions            */
+.btn.primary {
+  background:   var(--green);
+  color:        var(--white);
+  border-color: var(--green);
+}
+
+/* Hover states — outline fills; primary darkens              */
+.btn:hover         { background: var(--green);      color: var(--white); }
+.btn.primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+
+/* .btn.danger — red outline for destructive actions          */
+.btn.danger       { border-color: var(--red-muted); color: var(--red-muted); }
+.btn.danger:hover { background:   var(--red-muted); color: var(--white); }
+
+/* .btn.small — compact auto-width inline button              */
+.btn.small {
+  padding:   5px 14px;
+  font-size: 0.85rem;
+  width:     auto;
+  display:   inline-block;
+}
+
+
+/* 
+   FORM INPUTS — dashed tan border, green focus
+    */
+
+/* label — Fredoka font, medium brown, letter-spaced          */
+label {
+  display:        block;
+  font-family:    var(--font-head);
+  font-size:      0.9rem;
+  font-weight:    600;
+  color:          var(--text-mid);
+  margin-bottom:  4px;
+  letter-spacing: 0.03em;
+}
+
+/* text inputs and datetime pickers                           */
+input[type="text"],
+input[type="datetime-local"],
+textarea {
+  width:         100%;
+  padding:       9px 13px;
+  border:        2px dashed var(--tan-dark);
+  border-radius: var(--radius);
+  background:    var(--tan);
+  font-family:   var(--font-body);
+  font-size:     0.93rem;
+  color:         var(--text-dark);
+  outline:       none;
+  transition:    border-color 0.14s, background 0.14s;
+  margin-bottom: 12px;
+}
+
+/* Focus — solid green border, white background               */
+input:focus,
+textarea:focus {
+  border-color: var(--green);
+  background:   var(--white);
+}
+
+/* textarea — vertical resize only, minimum height            */
+textarea {
+  border-radius: var(--radius);
+  resize:        vertical;
+  min-height:    72px;
+}
+
+/* placeholder text — light tan hint color                    */
+::placeholder { color: var(--text-light); }
+
+
+/* 
+   ERROR MESSAGE — red dashed border on pale pink background
+    */
+.error {
+  font-size:     0.84rem;
+  color:         var(--red-muted);
+  background:    #faeae7;
+  border:        1.5px dashed var(--red-muted);
+  border-radius: var(--radius);
+  padding:       8px 12px;
+  margin-bottom: 10px;
+  font-weight:   600;
+}
+
+
+/* 
+   BACK LINK — small text navigation button, turns red on hover
+    */
+.back-link {
+  background:     none;
+  border:         none;
+  color:          var(--text-mid);
+  font-family:    var(--font-head);
+  font-size:      0.9rem;
+  font-weight:    600;
+  cursor:         pointer;
+  padding:        0;
+  text-align:     left;
+  letter-spacing: 0.02em;
+}
+.back-link:hover { color: var(--red-muted); }
