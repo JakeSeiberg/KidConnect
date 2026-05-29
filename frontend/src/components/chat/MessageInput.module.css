@@ -1,0 +1,60 @@
+/*
+ * 
+ * File:    MessageInput.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped styles for the MessageInput bar. White
+ *          background, dotted top border. flex-shrink: 0
+ *          keeps it always visible. Input grows to fill width;
+ *          send button is a fixed compact green pill.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .bar — white strip at the bottom of ChatFeed.
+   flex-shrink: 0 prevents compression when feed grows.       */
+.bar {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  padding:     10px 12px;
+  background:  var(--white);
+  border-top:  2.5px solid var(--tan-dark);
+  flex-shrink: 0;
+}
+
+/* .input — text field that grows to fill remaining width.
+   margin-bottom: 0 overrides the global input margin rule.   */
+.input {
+  flex:          1;
+  margin-bottom: 0;
+  padding:       9px 13px;
+  border:        2px dashed var(--tan-dark);
+  border-radius: var(--radius);
+  background:    var(--tan);
+  font-family:   var(--font-body);
+  font-size:     0.9rem;
+  color:         var(--text-dark);
+  outline:       none;
+  transition:    border-color 0.14s, background 0.14s;
+}
+.input:focus { border-color: var(--green); background: var(--white); }
+
+/* .sendBtn — compact green filled button to the right        */
+.sendBtn {
+  padding:       9px 18px;
+  border-radius: var(--radius);
+  background:    var(--green);
+  color:         var(--white);
+  border:        2px solid var(--green-dark);
+  font-family:   var(--font-head);
+  font-weight:   600;
+  font-size:     0.92rem;
+  cursor:        pointer;
+  flex-shrink:   0;
+  transition:    background 0.13s;
+}
+.sendBtn:hover    { background: var(--green-dark); }
+/* Disabled — reduced opacity when sending or input is empty  */
+.sendBtn:disabled { opacity: 0.5; cursor: default; }

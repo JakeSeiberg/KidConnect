@@ -1,0 +1,60 @@
+/*
+ * 
+ * File:    ChatFeed.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped layout for ChatFeed. The wrapper fills all
+ *          remaining vertical space in GroupPage via flex: 1.
+ *          The inner feed scrolls; the input bar below it is
+ *          fixed height. Dotted background continues the
+ *          scrapbook paper texture from the page body.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .wrapper — column filling all remaining page height.
+   min-height: 0 is required so flex children can shrink
+   below their content height, enabling inner scroll.         */
+.wrapper {
+  display:        flex;
+  flex-direction: column;
+  flex:           1;
+  min-height:     0;
+  overflow:       hidden;
+}
+
+/* .feed — the scrollable message area above the input bar.
+   Dotted background continues the scrapbook paper texture.   */
+.feed {
+  flex:           1;
+  overflow-y:     auto;
+  padding:        14px 14px 8px;
+  display:        flex;
+  flex-direction: column;
+  gap:            8px;
+  background:     var(--tan);
+  background-image: radial-gradient(var(--tan-mid) 1px, transparent 1px);
+  background-size:  18px 18px;
+}
+
+/* .dateSep — centered uppercase date label at top of feed    */
+.dateSep {
+  text-align:     center;
+  font-family:    var(--font-head);
+  font-size:      0.75rem;
+  font-weight:    600;
+  color:          var(--text-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin:         4px 0;
+}
+
+/* .empty — placeholder shown when no messages exist yet      */
+.empty {
+  text-align:  center;
+  color:       var(--text-light);
+  font-family: var(--font-head);
+  font-size:   0.9rem;
+  margin-top:  20px;
+}

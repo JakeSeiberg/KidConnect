@@ -1,0 +1,25 @@
+/*
+ * 
+ * File:    GroupPage.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped layout for GroupPage. The page fills the
+ *          full viewport height with column flex so the header
+ *          and tab bar are fixed-height and the panel below
+ *          grows to fill the rest and scrolls.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .page — full-viewport column.
+   height + max-height: 100vh prevents overflow; inner panels
+   use flex: 1 to fill remaining space.                       */
+.page {
+  display:        flex;
+  flex-direction: column;
+  width:          100vw;
+  max-width:      100vw;
+  height:         100vh;
+  max-height:     100vh;
+}

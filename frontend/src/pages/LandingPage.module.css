@@ -1,0 +1,59 @@
+/*
+ * 
+ * File:    LandingPage.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped styles for LandingPage only. Covers the
+ *          screen column wrapper, card centering, logo
+ *          typography, and footer text. All color values
+ *          come from CSS variables defined in index.css.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .screen — outer column wrapper, centered on the page.
+   max-width 400px keeps the card readable on large screens.   */
+.screen {
+  display:        flex;
+  flex-direction: column;
+  gap:            14px;
+  width:          100%;
+  max-width:      400px;
+  padding:        20px 16px;
+}
+
+/* .card — centers all content inside the landing card        */
+.card {
+  text-align: center;
+}
+
+/* .logoTitle — large Fredoka heading for the app name        */
+.logoTitle {
+  font-family:    var(--font-head);
+  font-size:      2.4rem;
+  font-weight:    700;
+  color:          var(--green-dark);
+  letter-spacing: 0.02em;
+  line-height:    1;
+}
+
+/* .logoSub — small tagline directly below the logo           */
+.logoSub {
+  font-family:    var(--font-head);
+  font-size:      0.9rem;
+  font-weight:    500;
+  color:          var(--text-mid);
+  letter-spacing: 0.08em;
+  margin-top:     4px;
+  margin-bottom:  12px;
+}
+
+/* .footer — tiny attribution text at the bottom              */
+.footer {
+  text-align:     center;
+  font-size:      0.78rem;
+  color:          var(--text-light);
+  font-family:    var(--font-head);
+  letter-spacing: 0.06em;
+}

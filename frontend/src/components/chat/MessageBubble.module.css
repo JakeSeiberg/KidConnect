@@ -1,0 +1,91 @@
+/*
+ * 
+ * File:    MessageBubble.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped styles for individual chat bubbles.
+ *          .mine   — right-aligned, green filled bubble
+ *          .theirs — left-aligned, warm white dashed bubble
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-28
+ * 
+ */
+
+
+/* .msg — base wrapper, column flex, max 75% width            */
+.msg {
+  display:        flex;
+  flex-direction: column;
+  max-width:      75%;
+}
+
+/* .mine — aligns bubble and children to the right            */
+.mine   { align-self: flex-end;   align-items: flex-end; }
+
+/* .theirs — aligns bubble and children to the left           */
+.theirs { align-self: flex-start; align-items: flex-start; }
+
+/* .sender — small name label above the bubble                */
+.sender {
+  font-family:   var(--font-head);
+  font-size:     0.75rem;
+  font-weight:   600;
+  color:         var(--text-mid);
+  margin-bottom: 2px;
+  padding:       0 4px;
+}
+
+/* .bubble — the rounded rectangle holding the message text   */
+.bubble {
+  padding:     9px 13px;
+  font-size:   0.9rem;
+  line-height: 1.45;
+  border:      2px solid transparent;
+  word-break:  break-word;
+}
+
+/* .mine .bubble — green fill, sharp bottom-right corner       */
+.mine .bubble {
+  background:    var(--bubble-mine);
+  color:         var(--white);
+  border-color:  var(--green-dark);
+  border-radius: var(--radius) var(--radius) 2px var(--radius);
+}
+
+/* .theirs .bubble — warm white, dashed, sharp bottom-left    */
+.theirs .bubble {
+  background:    var(--bubble-other);
+  color:         var(--text-dark);
+  border:        2px dashed var(--tan-dark);
+  border-radius: var(--radius) var(--radius) var(--radius) 2px;
+}
+
+/* .meta — row below bubble holding timestamp and delete btn  */
+.meta {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  padding:     0 4px;
+  margin-top:  2px;
+}
+
+/* .timestamp — small formatted send time                     */
+.timestamp {
+  font-size:   0.68rem;
+  color:       var(--text-light);
+  font-weight: 600;
+}
+
+/* .deleteBtn — small dashed red button visible to teachers   */
+.deleteBtn {
+  background:    none;
+  border:        1px dashed var(--red-muted);
+  border-radius: 4px;
+  color:         var(--red-muted);
+  font-family:   var(--font-head);
+  font-size:     0.68rem;
+  font-weight:   600;
+  padding:       1px 6px;
+  cursor:        pointer;
+  transition:    background 0.12s, color 0.12s;
+}
+.deleteBtn:hover { background: var(--red-muted); color: var(--white); }
