@@ -1,69 +1,54 @@
 /*
- * 
+ *
  * File:    LandingPage.jsx
  * System:  Kid Connect — Parent Communication Platform
- * Purpose: Entry point screen of the application. Displays
- *          the Kid Connect logo, tagline, and two role buttons.
- *          Clicking "I am a teacher" navigates to the
- *          CreateGroupForm. Clicking "I am a parent" navigates
- *          to the JoinGroupForm. Manages the view state that
- *          controls which sub-screen to render.
+ * Purpose: Entry point screen. Shows role buttons (teacher /
+ *          parent). Teachers can create a new class or browse
+ *          and join an existing one. Parents join via code.
  * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
  * Created: 2026-05-28
- * 
+ *
  */
 
-
-/* Imports 
-   useState:        React hook used to track which sub-screen
-                    is currently visible.
-   CreateGroupForm: the teacher's class creation form, shown
-                    when view === "create".
-   JoinGroupForm:   the parent's join form, shown when
-                    view === "join".
-   styles:          CSS module scoped to this component.
-    */
 import { useState }      from "react";
 import CreateGroupForm   from "../components/group/CreateGroupForm";
 import JoinGroupForm     from "../components/group/JoinGroupForm";
+import BrowseClassesForm from "../components/group/BrowseClassesForm";
 import styles            from "./LandingPage.module.css";
 
-
-/* 
-   COMPONENT: LandingPage
-   Props:
-     onJoined — callback from App, called after a successful
-                create or join so App can store the session.
-    */
+/*
+   view values:
+     "landing"  — role-select home screen
+     "teacher"  — teacher choice: create or browse
+     "create"   — teacher creates a new class
+     "browse"   — teacher browses existing classes
+     "join"     — parent joins via code
+*/
 export default function LandingPage({ onJoined }) {
 
-  /* view — controls which sub-screen is rendered.
-     "landing" shows the two role buttons (default).
-     "create"  shows the teacher create-group form.
-     "join"    shows the parent join-with-code form.           */
   const [view, setView] = useState("landing");
 
-
-  /*  Teacher path 
-     Render CreateGroupForm when view is "create".
-     onBack returns to the landing buttons.
-     onCreated calls the App callback to store the session.
-      */
+  /* Teacher sub-screen: create */
   if (view === "create") {
     return (
       <CreateGroupForm
-        onBack={() => setView("landing")}
+        onBack={() => setView("teacher")}
         onCreated={onJoined}
       />
     );
   }
 
+  /* Teacher sub-screen: browse existing classes */
+  if (view === "browse") {
+    return (
+      <BrowseClassesForm
+        onBack={() => setView("teacher")}
+        onJoined={onJoined}
+      />
+    );
+  }
 
-  /*  Parent path 
-     Render JoinGroupForm when view is "join".
-     onBack returns to the landing buttons.
-     onJoined calls the App callback to store the session.
-      */
+  /* Parent sub-screen: join via code */
   if (view === "join") {
     return (
       <JoinGroupForm
@@ -73,42 +58,66 @@ export default function LandingPage({ onJoined }) {
     );
   }
 
+  /* Teacher choice screen */
+  if (view === "teacher") {
+    return (
+      <div className={styles.screen}>
+        <button className="back-link" onClick={() => setView("landing")}>
+          Back
+        </button>
 
-  /*  Default landing view 
-     Renders the logo card with the two role buttons.
-     */
+        <div className="stripe-band" />
+        <div className={`card card-striped ${styles.card}`}>
+
+          <div className={styles.logoTitle} style={{ fontSize: "1.4rem" }}>
+            Teacher options
+          </div>
+          <div className={styles.logoSub}>What would you like to do?</div>
+
+          <hr className="hr" />
+
+          <button
+            className="btn primary"
+            style={{ marginBottom: 10 }}
+            onClick={() => setView("browse")}
+          >
+            Browse &amp; join a class
+          </button>
+
+          <button
+            className="btn"
+            onClick={() => setView("create")}
+          >
+            Create a new class
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* Default: role select */
   return (
     <div className={styles.screen}>
-
-      {/* Striped band sits flush above the card               */}
       <div className="stripe-band" />
-
       <div className={`card card-striped ${styles.card}`}>
 
-        {/* App name in large Fredoka heading                  */}
         <div className={styles.logoTitle}>Kid Connect</div>
-
-        {/* Tagline below the logo                             */}
         <div className={styles.logoSub}>Your class community</div>
 
-        {/* Dotted divider between logo and buttons            */}
         <hr className="hr" />
 
-        {/* Role selection prompt                              */}
         <p className="subtitle" style={{ textAlign: "center", marginBottom: 18 }}>
           Are you a teacher or a parent?
         </p>
 
-        {/* Teacher button — navigates to create-group form    */}
         <button
           className="btn primary"
           style={{ marginBottom: 10 }}
-          onClick={() => setView("create")}
+          onClick={() => setView("teacher")}
         >
           I am a teacher
         </button>
 
-        {/* Parent button — navigates to join-with-code form   */}
         <button
           className="btn"
           onClick={() => setView("join")}
@@ -116,7 +125,6 @@ export default function LandingPage({ onJoined }) {
           I am a parent
         </button>
       </div>
-
     </div>
   );
 }

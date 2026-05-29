@@ -1,0 +1,118 @@
+/*
+ *
+ * File:    BrowseClassesForm.module.css
+ * System:  Kid Connect — Parent Communication Platform
+ * Purpose: Scoped styles for BrowseClassesForm. Class list
+ *          rows use the same dotted/tan palette as the rest
+ *          of the app. Selected row gets a green tint.
+ * Authors: Abby Appling, Reid Allenstein, Ben Elster, Jacob Seiberg
+ * Created: 2026-05-29
+ *
+ */
+
+
+/* .list — unstyled list of class rows                        */
+.list {
+  list-style:    none;
+  display:       flex;
+  flex-direction: column;
+  gap:           8px;
+  margin-bottom: 4px;
+}
+
+/* .row — single class card, clickable                        */
+.row {
+  display:       flex;
+  align-items:   center;
+  gap:           10px;
+  padding:       11px 14px;
+  border:        2px dashed var(--tan-dark);
+  border-radius: var(--radius);
+  background:    var(--tan);
+  cursor:        pointer;
+  transition:    background 0.14s, border-color 0.14s;
+  user-select:   none;
+}
+
+.row:hover {
+  background:    var(--green-light);
+  border-color:  var(--green);
+}
+
+/* .selected — highlighted when the teacher clicks a row      */
+.selected {
+  background:    var(--green-light);
+  border-color:  var(--green);
+  border-style:  solid;
+}
+
+/* .icon — emoji school icon on the left                      */
+.icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* .className — class name, grows to fill remaining width     */
+.className {
+  flex:        1;
+  font-family: var(--font-head);
+  font-size:   1rem;
+  font-weight: 600;
+  color:       var(--text-dark);
+}
+
+/* .codePill — small code badge on the right                  */
+.codePill {
+  font-family:    var(--font-head);
+  font-size:      0.7rem;
+  font-weight:    600;
+  color:          var(--text-mid);
+  background:     var(--white);
+  border:         1.5px dotted var(--tan-dark);
+  border-radius:  6px;
+  padding:        2px 8px;
+  letter-spacing: 0.05em;
+  flex-shrink:    0;
+}
+
+.selected .codePill {
+  border-color: var(--green);
+  color:        var(--green-dark);
+}
+
+/* .check — green tick shown on the selected row              */
+.check {
+  font-size:   1rem;
+  color:       var(--green-dark);
+  font-weight: 700;
+  width:       16px;
+  text-align:  center;
+  flex-shrink: 0;
+}
+
+/* .joinForm — the name input + button section                */
+.joinForm {
+  display:        flex;
+  flex-direction: column;
+}
+
+/* .joinPrompt — short sentence above the name input          */
+.joinPrompt {
+  font-size:     0.88rem;
+  color:         var(--text-mid);
+  font-weight:   600;
+  margin-bottom: 10px;
+}
+
+.joinPrompt strong {
+  color: var(--green-dark);
+}
+
+/* .hint — loading / empty state text                         */
+.hint {
+  font-size:   0.88rem;
+  color:       var(--text-light);
+  font-weight: 600;
+  text-align:  center;
+  padding:     12px 0;
+}

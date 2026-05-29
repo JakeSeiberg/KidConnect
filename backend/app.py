@@ -100,6 +100,22 @@ def api_add_post():
         return jsonify({"ok": False, "error": str(e)}), 500
 
 
+@app.route("/api/posts/<int:post_id>", methods=["DELETE"])
+def api_delete_post(post_id):
+    """DELETE /api/posts/<post_id> — remove a post and its replies."""
+    conn = get_conn()
+    try:
+        with conn:
+            cur = conn.execute("DELETE FROM posts WHERE id = ?;", (post_id,))
+        conn.close()
+        if cur.rowcount == 0:
+            return jsonify({"ok": False, "error": "Post not found."}), 404
+        return jsonify({"ok": True}), 200
+    except Exception as e:
+        conn.close()
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
 @app.route("/api/classes", methods=["GET"])
 def api_get_classes():
     return jsonify({"ok": True, "classes": get_classes()})
@@ -170,17 +186,23 @@ def api_add_class():
 def api_join_class():
     """
     POST /api/classes/join
-    Body (JSON): { join_code, name, child_name }
+    Body (JSON): { join_code, name, child_name?, role? }
     join_code is the class id as a string.
+    child_name is optional for teachers (role="teacher").
     Returns: { ok, group, participant }
     """
     data       = request.get_json(force=True)
     join_code  = (data.get("join_code") or "").strip()
     name       = (data.get("name") or "").strip()
     child_name = (data.get("child_name") or "").strip()
+    role       = (data.get("role") or "parent").strip()
 
-    if not join_code or not name or not child_name:
-        return jsonify({"ok": False, "error": "join_code, name, and child_name are required"}), 400
+    if not join_code or not name:
+        return jsonify({"ok": False, "error": "join_code and name are required"}), 400
+
+    # child_name required only for parents
+    if role == "parent" and not child_name:
+        return jsonify({"ok": False, "error": "child_name is required for parents"}), 400
 
     # join_code is just the class id
     try:
@@ -232,7 +254,7 @@ def api_join_class():
                 "id":         participant_id,
                 "name":       name,
                 "child_name": child_name,
-                "role":       "parent",
+                "role":       role,
             },
         }), 200
 
