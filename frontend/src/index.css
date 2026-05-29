@@ -74,7 +74,7 @@ body {
   background:    var(--white);
   border-radius: var(--radius);
   border:        2px dotted var(--tan-dark);
-  padding:       22px 20px;
+  padding:       100px 100px;
 }
 
 /* .stripe-band — a 10px horizontal stripe at the top of major
